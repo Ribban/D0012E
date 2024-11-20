@@ -62,14 +62,14 @@ def main():
     stack1 = Stack()
 
     # Keeps track to not reuse numbers
-#    unique = []                                                                 # List to keep track of generated numbers
+#    unique = []                                                                # List to keep track of generated numbers
 #    while len(unique) < 100:
-#        num = random.randint(1, 100)                                            # Generate a random number
-#        if num not in unique:                                                   # Check if the number is unique
-#            unique.append(num)                                                  # Add the number to the list
-#            stack1.push(num)                                                    # Push the unique number onto the stack
+#        num = random.randint(1, 100)                                           # Generate a random number
+#        if num not in unique:                                                  # Check if the number is unique
+#            unique.append(num)                                                 # Add the number to the list
+#            stack1.push(num)                                                   # Push the unique number onto the stack
     # Worstcase:
-    for i in range(1, 10001):
+    for i in range(1, 100001):                                                  # Number of operations should be 100000^2 so 10000000000
         stack1.push(i)
 
     # Does not care for reusing numbers
@@ -77,7 +77,7 @@ def main():
 #        stack1.push(random.randint(1, 100))
 
     print("Original Stack:")
-    print(stack1.sortList())                                                      # Directly print the list representing the stack
+    print(stack1.sortList())                                                    # Directly print the list representing the stack
 
     start_time = time.time()
     sortStack(stack1)
