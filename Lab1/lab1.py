@@ -15,18 +15,22 @@ class Stack:
         new_node = Node(data)                                                   # Create a new node with given data
         new_node.next = self.content                                            # Link the new node to the top of stack
         self.content = new_node                                                 # Update top of stack to the new node
+        global pushs
+        pushs += 1
 
     def pop(self):                                                              # Remove and return the top element from stack
         if self.isEmpty():                                                      # Check if stack is empty
             return None
         data = self.content.data                                                # Get data from top node
         self.content = self.content.next                                        # Update top of stack to next node
+        global pops
+        pops += 1
         return data                                                             # Return data of removed node
 
     def isEmpty(self):                                                          # Check if the stack is empty
         return self.content is None                                             # Stack is empty if top node is None
     
-    def compare(self):                                                          # Returns a list of all elements in stack fro printing
+    def sortList(self):                                                          # Returns a list of all elements in stack fro printing
         elements = []                                                           # List to store elements
         current = self.content                                                  # Start from top of stack
         while current:                                                          # Move through stack until the end
@@ -36,12 +40,14 @@ class Stack:
 
 def sortStack(stack1):
     stack2 = Stack()                                                            # Initialize a temp stack (stack2) to temporarily hold elements for sorting
+    global compares
 
     while not stack1.isEmpty():                                                 # Loop until stack1 is empty
         temp = stack1.pop()                                                     # Pop the top element from stack1 and store it in a temp variable
 
         while not stack2.isEmpty() and stack2.content.data > temp:              # Move elements from stack2 back to stack1 if they are smaller than temp
             stack1.push(stack2.pop())
+            compares += 1
 
         stack2.push(temp)                                                       # Push the temp element into stack2 at the correct position to keep sorted order
 
@@ -49,6 +55,10 @@ def sortStack(stack1):
         stack1.push(stack2.pop())
 
 def main():
+    global pushs, pops, compares
+
+    pushs = pops = compares = 0
+
     stack1 = Stack()
 
     # Keeps track to not reuse numbers
@@ -59,7 +69,7 @@ def main():
 #            unique.append(num)                                                  # Add the number to the list
 #            stack1.push(num)                                                    # Push the unique number onto the stack
     # Worstcase:
-    for i in range(1, 100001):
+    for i in range(1, 10001):
         stack1.push(i)
 
     # Does not care for reusing numbers
@@ -67,15 +77,18 @@ def main():
 #        stack1.push(random.randint(1, 100))
 
     print("Original Stack:")
-    print(stack1.compare())                                                      # Directly print the list representing the stack
+    print(stack1.sortList())                                                      # Directly print the list representing the stack
 
     start_time = time.time()
     sortStack(stack1)
     end_time = time.time()
 
     print("Sorted Stack:")
-    print(stack1.compare())
+    print(stack1.sortList())
 
     print(f"Run time: {end_time - start_time:.6f} seconds")                      # Prints time usage with up to 6 decimals
+    print(f"Pushs: {pushs}")
+    print(f"Pops: {pops}")
+    print(f"Compares: {compares}")
 
 main()
