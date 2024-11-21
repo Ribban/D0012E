@@ -15,8 +15,8 @@ class Stack:
         new_node = Node(data)                                                   # Create a new node with given data
         new_node.next = self.content                                            # Link the new node to the top of stack
         self.content = new_node                                                 # Update top of stack to the new node
-        global pushs
-        pushs += 1
+        global pushes
+        pushes += 1
 
     def pop(self):                                                              # Remove and return the top element from stack
         if self.isEmpty():                                                      # Check if stack is empty
@@ -55,9 +55,9 @@ def sortStack(stack1):
         stack1.push(stack2.pop())
 
 def main():
-    global pushs, pops, compares
+    global pushes, pops, compares
 
-    pushs = pops = compares = 0
+    pushes = pops = compares = 0
 
     stack1 = Stack()
 
@@ -69,7 +69,7 @@ def main():
 #            unique.append(num)                                                 # Add the number to the list
 #            stack1.push(num)                                                   # Push the unique number onto the stack
     # Worstcase:
-    for i in range(1, 100001):                                                  # Number of operations should be 100000^2 so 10000000000
+    for i in range(1, 10000 +1):                                                  # Number of operations should be 100000^2 so 10000000000
         stack1.push(i)
 
     # Does not care for reusing numbers
@@ -87,7 +87,7 @@ def main():
     print(stack1.sortList())
 
     print(f"Run time: {end_time - start_time:.6f} seconds")                      # Prints time usage with up to 6 decimals
-    print(f"Pushs: {pushs}")
+    print(f"Pushes: {pushes}")
     print(f"Pops: {pops}")
     print(f"Compares: {compares}")
 
