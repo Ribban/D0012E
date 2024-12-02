@@ -1,4 +1,5 @@
 import random
+import time
 
 def maxKadane(arr):                                                 # Kadanes Algorithm that finds the maximum subarray sum
 
@@ -54,18 +55,45 @@ def maxRecursive(arr, start, end):                                  # Divide-and
 
 def main():
     
-    arr = [random.randint(-10, 10) for _ in range(8)]               # Generate a random array of integers between -10 and 10, with 8 elements
-    print("Random Array: ", arr)
+    arr = [random.randint(-10, 10) for _ in range(16777216)]               # Generate a random array of integers between -10 and 10, with 8 elements
+    print("Random Array: ", arr[:10], "...")
 
+    start_time_kad = time.time()
     max_sum_kad = maxKadane(arr)
+    end_time_kad = time.time()
     print("Kadane: ", max_sum_kad)
+    print(f"Run time: {end_time_kad - start_time_kad:.6f} seconds") 
 
+    start_time_rec = time.time()
     max_sum_rec = maxRecursive(arr, 0, len(arr) - 1)[0]
+    end_time_rec = time.time()
     print("Recursive: ", max_sum_rec)
+    print(f"Run time: {end_time_rec - start_time_rec:.6f} seconds") 
 
     if max_sum_kad == max_sum_rec:                                  # Compare the results of both algorithms to ensure correctness
         print("Korrekt")
     else:
         print("Error")
 
-main()
+def worstCase():
+    # Alternates between small positive and large negative values to give as bad of an array as possible
+    worst_case_arr = [(-1)**i * 10**6 if i % 2 == 0 else 1 for i in range(134217728)]
+    print("\nWorst-Case Array:", worst_case_arr[:10], "...")
+    start_time_kad = time.time()
+    max_sum_kad = maxKadane(worst_case_arr)
+    end_time_kad = time.time()
+    print("Kadane:", max_sum_kad)
+    print(f"Run time: {end_time_kad - start_time_kad:.6f} seconds") 
+
+    start_time_rec = time.time()
+    max_sum_rec = maxRecursive(worst_case_arr, 0, len(worst_case_arr) - 1)[0]
+    end_time_rec = time.time()
+    print("Recursive:", max_sum_rec)
+    print(f"Run time: {end_time_rec - start_time_rec:.6f} seconds") 
+
+    if max_sum_kad == max_sum_rec:
+        print("Korrekt")
+    else:
+        print("Error")
+
+worstCase()
