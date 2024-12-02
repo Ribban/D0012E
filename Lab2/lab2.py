@@ -76,8 +76,8 @@ def main():
         print("Error")
 
 def worstCase():
-    # Alternates between small positive and large negative values to give as bad of an array as possible
-    worst_case_arr = [(-1)**i * 10**6 if i % 2 == 0 else 1 for i in range(134217728)]
+    # Alternates between a very large and very small value to give as bad of an array as possible
+    worst_case_arr = [(-1)**i * 10**6 if i % 2 == 0 else 1 for i in range(8192)]
     print("\nWorst-Case Array:", worst_case_arr[:10], "...")
     start_time_kad = time.time()
     max_sum_kad = maxKadane(worst_case_arr)
