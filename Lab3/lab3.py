@@ -139,7 +139,7 @@ def main():                                     # Main function to benchmark ins
     print("Input Type\tc\tInsert Time\tLookup Time")
 
     for input_type in ("Random     ", "Increasing"): # Test both random and increasing input
-        for c in (None, 0.9, 0.8, 0.7, 0.6):         # Different balancing constraints
+        for c in (None, 0.9, 0.8, 0.7, 0.6, 0.51):         # Different balancing constraints
             tree_type = coolBST if c else BST        # Use coolBST only if a constraint is specified
             tree = tree_type(-1, c) if c is not None else tree_type(-1)
 
