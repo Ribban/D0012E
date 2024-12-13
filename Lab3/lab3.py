@@ -1,5 +1,6 @@
 import random
 import time
+import plotly.graph_objects as go
 
 class BST:                                      # Binary search tree implementation
     key = None                                  # Value stored in the current node
@@ -41,6 +42,52 @@ class BST:                                      # Binary search tree implementat
                 return True
         return False                            # Key not found
 
+    def visualize(self):                        # Visualizes the BST as a graph
+        def collect_edges_and_nodes(node, x, y, level, pos):
+            if not node:
+                return
+            
+            # Collect current node position and label
+            nodes.append((x, y, str(node.key)))
+            if node.left:
+                edges.append(((x, y), (x - dx / (2 ** level), y - dy)))
+                collect_edges_and_nodes(node.left, x - dx / (2 ** level), y - dy, level + 1, 'left')
+            if node.right:
+                edges.append(((x, y), (x + dx / (2 ** level), y - dy)))
+                collect_edges_and_nodes(node.right, x + dx / (2 ** level), y - dy, level + 1, 'right')
+
+        dx, dy = 1, 1  # Horizontal and vertical distance between levels
+        edges = []     # List of edges (connections between nodes)
+        nodes = []     # List of nodes with positions and labels
+
+        collect_edges_and_nodes(self, 0, 0, 1, 'root')
+
+        # Extract edge coordinates
+        Xe, Ye = [], []
+        for edge in edges:
+            Xe += [edge[0][0], edge[1][0], None]
+            Ye += [edge[0][1], edge[1][1], None]
+
+        # Extract node coordinates and labels
+        Xn = [node[0] for node in nodes]
+        Yn = [node[1] for node in nodes]
+        labels = [node[2] for node in nodes]
+
+        # Create the Plotly figure
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=Xe, y=Ye, mode='lines',
+                                 line=dict(color='rgb(210,210,210)', width=1), hoverinfo='none'))
+        fig.add_trace(go.Scatter(x=Xn, y=Yn, mode='markers', name='Nodes',
+                                 marker=dict(symbol='circle-dot', size=18, color='#6175c1',
+                                             line=dict(color='rgb(50,50,50)', width=1)),
+                                 text=labels, hoverinfo='text', opacity=0.8))
+
+        fig.update_layout(showlegend=False, xaxis=dict(showline=False, zeroline=False),
+                          yaxis=dict(showline=False, zeroline=False),
+                          margin=dict(l=40, r=40, b=85, t=100),
+                          hovermode='closest')
+        fig.show()
+
 
 class coolBST(BST):                             # Extended BST with balancing capabilities based on a constraint (c)
     def __init__(self, key, c):
@@ -69,6 +116,11 @@ class coolBST(BST):                             # Extended BST with balancing ca
         root.update_size()
         return root
 
+    def update_size(self):                      # Updates the size of the subtree
+        left_size = self.left.size if self.left else 0
+        right_size = self.right.size if self.right else 0
+        self.size = 1 + left_size + right_size
+
     def insert(self, key):                      # Inserts a key into the BST and balances if the c-constraint is violated
         super().insert(key)                     # Perform regular BST insertion
         if not self.check_c_constraint():       # If the constraint is violated
@@ -81,9 +133,8 @@ class coolBST(BST):                             # Extended BST with balancing ca
             self.right = rebuilt_tree.right
             self.size = rebuilt_tree.size
 
-
 def main():                                     # Main function to benchmark insertion and lookup times
-    INSERTIONS, LOOKUPS = 10000, 10000          # Number of operations to perform
+    INSERTIONS, LOOKUPS = 100, 100          # Number of operations to perform
 
     print("Input Type\tc\tInsert Time\tLookup Time")
 
@@ -111,5 +162,7 @@ def main():                                     # Main function to benchmark ins
             # Display the results
             c_display = "None" if c is None else f"{c}"
             print(f"{input_type}\t{c_display}\t{insert_time:.5f}    \t{lookup_time:.5f}")
+            tree.visualize()
 
 main()
+    
